@@ -1,33 +1,20 @@
-import { router, Stack } from "expo-router";
-import {
-  Poppins_400Regular,
-  Poppins_600SemiBold,
-  Poppins_700Bold,
-} from "@expo-google-fonts/poppins";
-import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider style={{ flex: 1 }}>
         <Stack
+        initialRouteName="howItWorks"
           screenOptions={{
             headerShown: false,
           }}
         >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="index"/>
+          <Stack.Screen name="data"/>
+          <Stack.Screen name="howItWorks"/>
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>
