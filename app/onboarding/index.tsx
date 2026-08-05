@@ -9,8 +9,28 @@ import Icon1 from "@/assets/OnboardingLogo1.svg";
 import Icon2 from "@/assets/OnboardingLogo2.svg";
 import Icon3 from "@/assets/OnboardingLogo3.svg";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 
 export default function OnboardingScreen() {
+  const pages = [
+    {
+      title: "Your Benefits at a\nGlance",
+      subtitle: "Get points, rewards and exclusive deals\nwhen you join",
+      content: "benefits",
+    },
+    {
+      title: "How It Works",
+      subtitle: "...",
+      content: "flow",
+    },
+    {
+      title: "Your Data Stays Private",
+      subtitle: "...",
+      content: "privacy",
+    },
+  ];
+  const [page, setPage] = useState(0);
+  const currentPage = pages[page];
   const router = useRouter();
 
   return (

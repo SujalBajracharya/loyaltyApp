@@ -64,7 +64,7 @@ export default function OnboardingScreen() {
         <View style={{ marginTop: 60, gap: 0 }}>
           <Button
             title="Continue"
-            onPress={() => router.push("/onboarding/howItWorks")}
+            onPress={() => router.push("/Signup")}
           />
           <Button title="Skip" variant="ghost" onPress={() => router.back()} />
         </View>
