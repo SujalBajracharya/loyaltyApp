@@ -7,7 +7,7 @@ import Google from "@/assets/google.svg";
 import Email from "@/assets/email.svg";
 import { Link, useRouter } from "expo-router";
 
-export default function OnboardingScreen() {
+export default function SignUpScreen() {
   const router = useRouter();
   const loginStyles = StyleSheet.create({
     link: {
@@ -68,6 +68,7 @@ export default function OnboardingScreen() {
             alignItems: "center",
             width: "100%",
             gap: 24,
+            paddingBottom: 40,
           }}
         >
           {/* OAuth Buttons */}
@@ -111,7 +112,7 @@ export default function OnboardingScreen() {
           </AppText>
 
           {/* Sign up Button */}
-          <Button title="Sign up" variant="primary" />
+          <Button title="Sign up" variant="primary" onPress={()=> router.push('/signup/nextPage')}/>
 
           {/* Terms and Conditions */}
           <AppText
