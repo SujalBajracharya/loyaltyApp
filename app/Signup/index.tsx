@@ -26,7 +26,7 @@ export default function SignUpScreen() {
         }}
       >
         {/* sign in button */}
-        <TouchableOpacity onPress={() => router.back()} style={{ padding: 10 }}>
+        <TouchableOpacity onPress={() => router.push("../signin")} style={{ padding: 10 }}>
           <AppText
             variant="medium"
             size="s"

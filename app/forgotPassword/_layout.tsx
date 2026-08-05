@@ -2,16 +2,14 @@ import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-export default function SignUpLayout() {
+export default function ForgotPasswordLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider style={{ flex: 1 }}>
         <Stack
-        initialRouteName="index"
+          initialRouteName="index"
         >
-          <Stack.Screen name="index" options={{headerShown: false}}/>
-          <Stack.Screen name="nextPage" options={{headerTitle: "Signup"}}/>
-          <Stack.Screen name="allSet" options={{headerShown: false}}/>
+          <Stack.Screen name="index" options={{headerTitle: ""}}/>
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>

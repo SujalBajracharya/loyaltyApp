@@ -4,66 +4,51 @@ import styles from "../../styles/styles";
 import AppText from "../../components/AppText";
 import Button from "@/components/Button";
 import { useRouter, Stack } from "expo-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "@/components/InputField";
-import PasswordRequirement from "@/components/PasswordRequirement";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignupProcessScreen() {
-  type SignupForm = z.infer<typeof schema>;
-
+  type ForgotForm = z.infer<typeof schema>;
   const router = useRouter();
 
   const schema = z.object({
     email: z.email("Invalid email"),
-    password: z.string().min(8, "Minimum 8 characters"),
-    fullName: z
-      .string()
-      .trim()
-      .min(2, "Full name is required")
-      .max(100, "Full name is too long"),
-    address: z.string().trim().min(5, "Address is required"),
-    contact: z
-      .string()
-      .regex(/^[0-9]{10}$/, "Contact number must be 10 digits"),
   });
 
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<SignupForm>({
+  } = useForm<ForgotForm>({
     resolver: zodResolver(schema),
     defaultValues: {
       email: "",
-      password: "",
-      fullName: "",
-      address: "",
-      contact: "",
     },
   });
 
-  const password = watch("password");
-
-  const passwordChecks = {
-    length: password.length >= 8,
-    symbol: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-    number: /\d/.test(password),
-  };
-
-  const onSubmit = async (data: SignupForm) => {
+  const onSubmit = async (data: ForgotForm) => {
     try {
-      await AsyncStorage.setItem("signupForm", JSON.stringify(data));
+      const storedData = await AsyncStorage.getItem("signupForm");
+      if (!storedData) {
+        console.log("No AsyncStorage data found.");
+        return;
+      }
 
-      console.log("Form saved!");
-      router.push("/signup/allSet");
-      const asyncStorage = await AsyncStorage.getItem("signupForm");
-      console.log("From AsyncStorage: \n" + asyncStorage);
+      const forgotData = JSON.parse(storedData);
+
+      if (
+        forgotData.email == data.email
+      ) {
+        console.log(`Email matched \n Sending OTP to ${forgotData}`);
+        router.push("/signin");
+      } else {
+        console.log(`Email didnt match. \n Enter your Email`);
+      }
     } catch (error) {
-      console.error("Failed to save form:", error);
+      console.error("Failed to read AsyncStorage:", error);
     }
   };
 
@@ -111,7 +96,7 @@ export default function SignupProcessScreen() {
                   color="textDark"
                   style={{ textAlign: "left", fontWeight: "700" }}
                 >
-                  Provide a brief personal overview
+                  Forgot Password
                 </AppText>
                 <AppText
                   variant="medium"
@@ -119,8 +104,8 @@ export default function SignupProcessScreen() {
                   color="textLight"
                   style={{ textAlign: "left", fontWeight: "400" }}
                 >
-                  Provide a few more details about yourself so we{"\n"}can
-                  better personalize your experience.
+                  We’ll send you a verification code right away {"\n"}
+                  to validate your email.
                 </AppText>
               </View>
 
@@ -129,29 +114,7 @@ export default function SignupProcessScreen() {
                 <InputField
                   control={control}
                   name="email"
-                  placeholder="Email"
-                />
-
-                <InputField
-                  control={control}
-                  name="fullName"
-                  placeholder="Full Name"
-                />
-                <InputField
-                  control={control}
-                  name="address"
-                  placeholder="Address"
-                />
-                <InputField
-                  control={control}
-                  name="contact"
-                  placeholder="Contact"
-                />
-                <InputField
-                  control={control}
-                  name="password"
-                  placeholder="Password"
-                  secureTextEntry
+                  placeholder="Email Address"
                 />
               </View>
             </View>
@@ -167,29 +130,9 @@ export default function SignupProcessScreen() {
                 },
               ]}
             >
-              {/* Conditions */}
-              <View
-                style={{ gap: 8, alignItems: "flex-start", paddingBottom: 50 }}
-              >
-                <PasswordRequirement
-                  satisfied={passwordChecks.length}
-                  text="Minimum 8 characters"
-                />
-
-                <PasswordRequirement
-                  satisfied={passwordChecks.symbol}
-                  text="At least one symbol"
-                />
-
-                <PasswordRequirement
-                  satisfied={passwordChecks.number}
-                  text="At least one number"
-                />
-              </View>
-
               {/* Sign up Button */}
               <Button
-                title="Continue"
+                title="Send verification code"
                 variant="primary"
                 onPress={() => handleSubmit(onSubmit)()}
               />
