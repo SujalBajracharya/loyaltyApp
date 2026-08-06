@@ -1,13 +1,16 @@
 import QR from "@/assets/qrcode.svg";
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 const FloatingQRButton = () => {
+  const router = useRouter();
+
   const styles = StyleSheet.create({
     fab: {
       position: "absolute",
       right: 20,
-      bottom: 5,
+      bottom: 10,
       width: 89,
       height: 89,
       borderRadius: 36,
@@ -18,7 +21,7 @@ const FloatingQRButton = () => {
     },
   });
   return (
-    <TouchableOpacity style={styles.fab}>
+    <TouchableOpacity style={styles.fab} onPress={() => router.push("/qr")}>
       <QR width="45" height="45" />
     </TouchableOpacity>
   );

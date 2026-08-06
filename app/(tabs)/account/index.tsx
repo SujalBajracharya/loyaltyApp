@@ -3,8 +3,8 @@ import { Text, View } from "react-native";
 
 const index = () => {
   return (
-    <View>
-      <Text>Account Pageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Account Page</Text>
     </View>
   );
 };

@@ -85,9 +85,9 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-          <FloatingQRButton />
         </View>
       </ScrollView>
+      <FloatingQRButton />
     </View>
   );
 }
