@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 
   title: {
@@ -48,6 +48,40 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#666",
     fontSize: 20,
+  },
+  card: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 16,
+  },
+  pointsCard: {
+    marginTop: -90,
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 16,
+    elevation: 6,
+  },
+  row: {
+    paddingBottom: 14,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 14,
+  },
+  pointsCardRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  image: {
+    width: "100%",
+    borderRadius: 12,
+    resizeMode: "contain", // or "contain", "stretch", "center"
+  },
+  divider: {
+    marginVertical: 10,
+    height: 1,
+    backgroundColor: "#E5E5E5",
   },
 });
 

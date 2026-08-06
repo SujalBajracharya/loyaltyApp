@@ -46,7 +46,7 @@ export default function SignInScreen() {
         signupData.password == data.password
       ) {
         console.log(`signin completed. \n email and password matched.`);
-        router.push("/signup/allSet");
+        router.push("../home");
       } else {
         console.log(`signin failed. \n Invalid email or password.`);
       }

@@ -1,11 +1,11 @@
-import { Image, TouchableOpacity, View, StyleSheet, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import styles from "../../styles/styles";
-import AppText from "../../components/AppText";
-import Button from "@/components/Button";
-import Google from "@/assets/google.svg";
 import Email from "@/assets/email.svg";
+import Google from "@/assets/google.svg";
+import Button from "@/components/Button";
 import { Link, useRouter } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../../components/AppText";
+import styles from "../../styles/styles";
 
 export default function SignUpScreen() {
   const router = useRouter();
@@ -26,7 +26,10 @@ export default function SignUpScreen() {
         }}
       >
         {/* sign in button */}
-        <TouchableOpacity onPress={() => router.push("../signin")} style={{ padding: 10 }}>
+        <TouchableOpacity
+          onPress={() => router.push("/home")}
+          style={{ padding: 10 }}
+        >
           <AppText
             variant="medium"
             size="s"
@@ -112,7 +115,11 @@ export default function SignUpScreen() {
           </AppText>
 
           {/* Sign up Button */}
-          <Button title="Sign up" variant="primary" onPress={()=> router.push('/signup/nextPage')}/>
+          <Button
+            title="Sign up"
+            variant="primary"
+            onPress={() => router.push("/signup/nextPage")}
+          />
 
           {/* Terms and Conditions */}
           <AppText
