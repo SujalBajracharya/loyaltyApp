@@ -2,7 +2,22 @@ import AppText from "@/components/AppText";
 import styles from "@/styles/styles";
 import { Image, View } from "react-native";
 import Button from "./Button";
-export default function RewardCard() {
+
+interface RewardCardProps {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+}
+
+export default function RewardCard({
+  id,
+  title,
+  price,
+  image,
+}: RewardCardProps) {
+  console.log(image);
+
   return (
     <View
       style={{
@@ -13,13 +28,10 @@ export default function RewardCard() {
         width: 243,
       }}
     >
-      <Image
-        style={styles.image}
-        source={require("@/assets/placeholder_image.png")}
-      />
+      <Image style={styles.image} source={{ uri: image }} />
 
       <AppText variant="medium" weight="800" style={{ fontSize: 16 }}>
-        Free Premium Coffee
+        {title}
       </AppText>
 
       <AppText
@@ -28,7 +40,15 @@ export default function RewardCard() {
         color="textLight"
         style={{ fontSize: 14, marginBottom: 12 }}
       >
-        80 pts
+        {price} pts
+      </AppText>
+      <AppText
+        variant="medium"
+        weight="500"
+        color="textLight"
+        style={{ fontSize: 14, marginBottom: 12, display: "none" }}
+      >
+        {id}
       </AppText>
 
       <Button style={{ borderRadius: 24 }} title="Redeem" />

@@ -8,9 +8,37 @@ import RewardCard from "@/components/RewardCard";
 import SectionHeader from "@/components/SectionHeader";
 import UpdateCard from "@/components/UpdateCard";
 import { theme } from "@/constants/theme";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  rating: {
+    rate: number;
+    count: number;
+  };
+}
+
 export default function HomeScreen() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const getProducts = async () => {
+    try {
+      const response = await axios.get("https://fakestoreapi.com/products");
+
+      console.log(response.data);
+      setProducts(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
   return (
     <View style={styles.container}>
       <ScrollView
@@ -42,10 +70,19 @@ export default function HomeScreen() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ gap: 18 }}
               >
+                {products.map((product) => (
+                  <RewardCard
+                    key={product.id}
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    image={product.image}
+                  />
+                ))}
+
+                {/* <RewardCard />
                 <RewardCard />
-                <RewardCard />
-                <RewardCard />
-                <RewardCard />
+                <RewardCard /> */}
               </ScrollView>
             </View>
 
@@ -57,10 +94,16 @@ export default function HomeScreen() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ gap: 18 }}
               >
-                <MenuCard />
-                <MenuCard />
-                <MenuCard />
-                <MenuCard />
+                {products.map((product) => (
+                  <MenuCard
+                    key={product.id}
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    image={product.image}
+                    rating={product.rating.rate}
+                  />
+                ))}
               </ScrollView>
             </View>
 
@@ -68,10 +111,13 @@ export default function HomeScreen() {
             <View>
               <SectionHeader title="News & Updates" />
               <View style={{ gap: 11 }}>
-                <UpdateCard />
-                <UpdateCard />
-                <UpdateCard />
-                <UpdateCard />
+                {products.slice(0, 3).map((product) => (
+                  <UpdateCard
+                    image={product.image}
+                    key={product.id}
+                    id={product.id}
+                  />
+                ))}
               </View>
             </View>
 
@@ -79,9 +125,21 @@ export default function HomeScreen() {
             <View>
               <SectionHeader title="Recent Activity" />
               <View style={{ gap: 11 }}>
-                <ActivityCard />
-                <ActivityCard />
-                <ActivityCard />
+                <ActivityCard
+                  title="Purchase at Himalayan Java Cafe"
+                  date="21 Dec, 2025"
+                  points={55}
+                />
+                <ActivityCard
+                  title="Redeemed Free Coffee"
+                  date="21 Dec , 2025"
+                  points={-200}
+                />
+                <ActivityCard
+                  title="Purchase at Himalayan Java Cafe"
+                  date="21 Dec, 2025"
+                  points={50}
+                />
               </View>
             </View>
           </View>

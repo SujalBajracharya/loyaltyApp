@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     borderRadius: 12,
+    aspectRatio: 1,
     resizeMode: "contain", // or "contain", "stretch", "center"
   },
   divider: {

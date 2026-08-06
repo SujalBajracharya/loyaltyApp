@@ -1,54 +1,77 @@
+import Minus from "@/assets/minus.svg";
+import Plus from "@/assets/plus.svg";
 import AppText from "@/components/AppText";
-import { Text, TouchableOpacity, View } from "react-native";
-export default function ActivityCard() {
+import { TouchableOpacity, View } from "react-native";
+
+interface ActivityCardProps {
+  title: string;
+  date: string;
+  points: number;
+  onPress?: () => void;
+}
+
+export default function ActivityCard({
+  title,
+  date,
+  points,
+  onPress,
+}: ActivityCardProps) {
+  const isCredit = points >= 0;
+
   return (
     <TouchableOpacity
-      style={[
-        {
-          flexDirection: "row",
-          paddingHorizontal: 8,
-          backgroundColor: "white",
-          borderRadius: 8,
-          paddingVertical: 16,
-          gap: 21,
-        },
-      ]}
+      onPress={onPress}
+      style={{
+        flexDirection: "row",
+        paddingHorizontal: 8,
+        paddingVertical: 16,
+        backgroundColor: "white",
+        borderRadius: 8,
+        gap: 21,
+        alignItems: "center",
+      }}
     >
       <View
         style={{
           width: 56,
-          aspectRatio: 1 / 1,
-          borderRadius: "50%",
-          backgroundColor: "#B5FFB9",
+          aspectRatio: 1,
+          borderRadius: 28,
+          backgroundColor: isCredit ? "#B5FFB9" : "#FFD6D6",
           justifyContent: "center",
-          alignContent: "center",
+          alignItems: "center",
         }}
       >
-        <Text style={{ textAlign: "center" }}>+</Text>
+        {isCredit ? (
+          <Plus width={15} height={15} />
+        ) : (
+          <Minus width={15} height={15} />
+        )}
       </View>
 
       <View style={{ flex: 1 }}>
         <AppText variant="medium" weight="800" style={{ fontSize: 16 }}>
-          Purchase at Himalayan Java Cafe
+          {title}
         </AppText>
 
         <AppText
           variant="medium"
           weight="500"
           color="textLight"
-          style={{ fontSize: 12, marginBottom: 12 }}
+          style={{ fontSize: 12, marginTop: 4 }}
         >
-          21 Dec , 2025
+          {date}
         </AppText>
       </View>
+
       <View>
         <AppText
           variant="bold"
           weight="700"
-          size="m"
-          style={{ color: "#43A047" }}
+          style={{
+            color: isCredit ? "#43A047" : "#E53935",
+          }}
         >
-          + 50 pts
+          {points > 0 ? `+${points}` : points} pts
         </AppText>
       </View>
     </TouchableOpacity>

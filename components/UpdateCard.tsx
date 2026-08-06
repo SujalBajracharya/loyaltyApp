@@ -1,6 +1,12 @@
 import AppText from "@/components/AppText";
 import { Image, TouchableOpacity, View } from "react-native";
-export default function UpdateCard() {
+
+type UpdateCardProp = {
+  id: number;
+  image: string;
+};
+
+export default function UpdateCard({ id, image }: UpdateCardProp) {
   return (
     <TouchableOpacity
       style={[
@@ -15,7 +21,7 @@ export default function UpdateCard() {
       ]}
     >
       <Image
-        source={require("@/assets/placeholder_image.png")}
+        source={{ uri: image }}
         style={{
           width: 108,
           height: 82,
@@ -35,7 +41,7 @@ export default function UpdateCard() {
           color="textLight"
           style={{ fontSize: 12, marginBottom: 12 }}
         >
-          Valid till 2 Dec 2025
+          Valid till {id} Dec 2025
         </AppText>
       </View>
     </TouchableOpacity>

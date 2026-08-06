@@ -2,7 +2,21 @@ import AppText from "@/components/AppText";
 import styles from "@/styles/styles";
 import { Image, TouchableOpacity } from "react-native";
 
-export default function MenuCard() {
+type MenuCardProps = {
+  id: number;
+  title: string;
+  image: string;
+  price: number;
+  rating: number;
+};
+
+export default function MenuCard({
+  id,
+  title,
+  image,
+  price,
+  rating,
+}: MenuCardProps) {
   return (
     <TouchableOpacity
       style={{
@@ -13,13 +27,10 @@ export default function MenuCard() {
         width: 243,
       }}
     >
-      <Image
-        style={styles.image}
-        source={require("@/assets/placeholder_image.png")}
-      />
+      <Image style={styles.image} source={{ uri: image }} />
 
       <AppText variant="medium" weight="800" style={{ fontSize: 16 }}>
-        Chicken Wrap
+        {title}
       </AppText>
 
       <AppText
@@ -28,7 +39,7 @@ export default function MenuCard() {
         color="textLight"
         style={{ fontSize: 14, marginBottom: 12 }}
       >
-        Rs 500.00
+        Rs {price}
       </AppText>
 
       <AppText
@@ -37,7 +48,15 @@ export default function MenuCard() {
         color="primary"
         style={{ fontSize: 14, marginBottom: 12 }}
       >
-        Earn +40 pts
+        Earn +{rating} pts
+      </AppText>
+      <AppText
+        variant="medium"
+        weight="500"
+        color="primary"
+        style={{ fontSize: 14, marginBottom: 12, display: "none" }}
+      >
+        {id}
       </AppText>
     </TouchableOpacity>
   );
