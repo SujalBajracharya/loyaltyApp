@@ -4,9 +4,16 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { router } from "expo-router";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+type JwtPayload = {
+  sub: number;
+  user: string;
+  iat: number;
+};
 
 type User = {
   address: {
@@ -33,17 +40,15 @@ type User = {
 
 export default function AccountScreen() {
   const [user, setUser] = useState<User | null>(null);
-  const getUser = async () => {
+  const loadUser = async () => {
     try {
-      const username = await AsyncStorage.getItem("username");
-      const response = await axios.get("https://fakestoreapi.com/users");
+      const token = await AsyncStorage.getItem("JWT token");
 
-      const user = response.data.find(
-        (user: User) => user?.username === username,
-      );
-
-      if (user) {
-        setUser(user);
+      if (token) {
+        const decoded = jwtDecode<JwtPayload>(token);
+        const id = decoded.sub;
+        const user = await axios.get(`https://fakestoreapi.com/users/${id}`);
+        setUser(user.data);
       }
     } catch (error) {
       console.log(error);
@@ -51,7 +56,7 @@ export default function AccountScreen() {
   };
 
   useEffect(() => {
-    getUser();
+    loadUser();
   }, []);
 
   const Logout = async () => {

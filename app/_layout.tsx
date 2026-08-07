@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -32,6 +33,7 @@ export default function RootLayout() {
           <Stack.Screen name="signup" />
           <Stack.Screen name="(tabs)" />
         </Stack>
+        <Toast />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

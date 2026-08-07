@@ -1,6 +1,9 @@
+import AppText from "@/components/AppText";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { router } from "expo-router";
 import { useState } from "react";
-import { Button, Text, View } from "react-native";
+import { Button, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function QRScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -13,8 +16,8 @@ export default function QRScreen() {
 
   if (!permission.granted) {
     return (
-      <View>
-        <Text>Camera permission is required.</Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <AppText>Camera permission is required</AppText>
         <Button title="Grant Permission" onPress={requestPermission} />
       </View>
     );
@@ -31,7 +34,12 @@ export default function QRScreen() {
           ? undefined
           : ({ data }) => {
               setScanned(true);
-              console.log(data);
+              router.replace("/home");
+              Toast.show({
+                type: "success",
+                text1: "QR reads:",
+                text2: data,
+              });
             }
       }
     />
