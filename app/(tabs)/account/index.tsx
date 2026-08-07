@@ -59,6 +59,9 @@ export default function AccountScreen() {
     loadUser();
   }, []);
 
+  const latitude = Number(user?.address.geolocation.lat);
+  const longitude = Number(user?.address.geolocation.long);
+
   const Logout = async () => {
     try {
       await AsyncStorage.clear();
@@ -142,15 +145,28 @@ export default function AccountScreen() {
         {/* Location */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Geo Location</Text>
-
-          <Text style={styles.value}>
-            Latitude: {user?.address.geolocation.lat}
-          </Text>
-
-          <Text style={styles.value}>
-            Longitude: {user?.address.geolocation.long}
-          </Text>
+          <Text style={styles.value}>Latitude: {latitude}</Text>
+          <Text style={styles.value}>Longitude: {longitude}</Text>
         </View>
+        {/* <View style={styles.card}>
+          <MapView
+            style={{ height: 300, width: "100%" }}
+            initialRegion={{
+              latitude: latitude,
+              longitude: longitude,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: latitude,
+                longitude: longitude,
+              }}
+              title={user?.username}
+            />
+          </MapView>
+        </View> */}
 
         {/* SignOut Button */}
         <View style={styles.buttonContainer}>

@@ -17,8 +17,6 @@ export default function RewardCard({
   price,
   image,
 }: RewardCardProps) {
-  console.log(image);
-
   return (
     <View
       style={{
