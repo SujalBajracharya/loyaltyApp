@@ -1,14 +1,10 @@
+import AppText from "@/components/AppText";
+import Button from "@/components/Button";
+import styles from "@/styles/productStyles";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 
 type Product = {
   id: number;
@@ -24,6 +20,7 @@ type Product = {
 };
 
 export default function ProductScreen() {
+  const [loading, setLoading] = useState(true);
   const { id } = useLocalSearchParams();
   const [product, setProduct] = useState<Product | null>(null);
 
@@ -37,12 +34,29 @@ export default function ProductScreen() {
         setProduct(response.data);
       } catch (error) {
         console.error("Failed to load item details", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
   }, [id]);
 
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color="#2563EB" />
+        <AppText> Please wait.... </AppText>
+        <AppText> Things are getting ready </AppText>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -73,131 +87,8 @@ export default function ProductScreen() {
 
       {/* Bottom Buttons */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.cartButton}>
-          <Text style={styles.cartText}>Add to Cart</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buyButton}>
-          <Text style={styles.buyText}>Buy Now</Text>
-        </TouchableOpacity>
+        <Button title="Redeem" />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  header: {
-    marginTop: 60,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  imageContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 320,
-    padding: 20,
-  },
-
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-
-  infoContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 120,
-  },
-
-  category: {
-    fontSize: 13,
-    color: "#6B7280",
-    fontWeight: "600",
-    letterSpacing: 1,
-    marginBottom: 8,
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#111827",
-    lineHeight: 32,
-  },
-
-  price: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#2563EB",
-    marginTop: 18,
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: "#E5E7EB",
-    marginVertical: 24,
-  },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 10,
-    color: "#111827",
-  },
-
-  description: {
-    fontSize: 15,
-    color: "#4B5563",
-    lineHeight: 24,
-  },
-
-  bottomBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-    gap: 12,
-  },
-
-  cartButton: {
-    flex: 1,
-    height: 52,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: "#111827",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  buyButton: {
-    flex: 1,
-    height: 52,
-    borderRadius: 14,
-    backgroundColor: "#111827",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  cartText: {
-    color: "#111827",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-
-  buyText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-});

@@ -6,7 +6,13 @@ import axios from "axios";
 import { router } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import {
+  Linking,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type JwtPayload = {
@@ -143,11 +149,19 @@ export default function AccountScreen() {
         </View>
 
         {/* Location */}
-        <View style={styles.card}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() =>
+            Linking.openURL(
+              `https://www.google.com/maps?q=${latitude},${longitude}`,
+            )
+          }
+        >
           <Text style={styles.cardTitle}>Geo Location</Text>
           <Text style={styles.value}>Latitude: {latitude}</Text>
           <Text style={styles.value}>Longitude: {longitude}</Text>
-        </View>
+        </TouchableOpacity>
+
         {/* <View style={styles.card}>
           <MapView
             style={{ height: 300, width: "100%" }}

@@ -133,6 +133,7 @@ export default function SignupProcessScreen() {
                   control={control}
                   name="email"
                   placeholder="Email"
+                  keyboardType="email-address"
                 />
 
                 <InputField
@@ -148,6 +149,7 @@ export default function SignupProcessScreen() {
                 <InputField
                   control={control}
                   name="contact"
+                  keyboardType="number-pad"
                   placeholder="Contact"
                 />
                 <InputField

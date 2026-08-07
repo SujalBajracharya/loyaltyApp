@@ -1,8 +1,14 @@
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
-import { StyleSheet, TextInput, View, TouchableOpacity } from "react-native";
-import AppText from "./AppText";
-import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import {
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import AppText from "./AppText";
 
 interface InputFieldProps<T extends FieldValues> {
   control: Control<T>;
@@ -11,6 +17,7 @@ interface InputFieldProps<T extends FieldValues> {
   label?: string;
   placeholder?: string;
   secureTextEntry?: boolean;
+  keyboardType?: TextInputProps["keyboardType"];
 }
 
 export default function InputField<T extends FieldValues>({
@@ -19,6 +26,7 @@ export default function InputField<T extends FieldValues>({
   label,
   placeholder,
   secureTextEntry,
+  keyboardType,
 }: InputFieldProps<T>) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
@@ -39,6 +47,7 @@ export default function InputField<T extends FieldValues>({
             onBlur={onBlur}
             onChangeText={onChange}
             secureTextEntry={secureTextEntry && !isPasswordVisible}
+            keyboardType={keyboardType}
           />
 
           {error && (
@@ -58,7 +67,7 @@ export default function InputField<T extends FieldValues>({
               }}
             >
               <Ionicons
-                name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
+                name={isPasswordVisible ? "eye-outline" : "eye-off-outline"}
                 size={22}
                 color="#777"
               />
