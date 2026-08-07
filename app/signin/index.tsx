@@ -4,8 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Image, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
 import AppText from "../../components/AppText";
@@ -13,6 +14,7 @@ import styles from "../../styles/styles";
 
 export default function SignInScreen() {
   type SignInForm = z.infer<typeof schema>;
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const axios = require("axios");
@@ -40,6 +42,7 @@ export default function SignInScreen() {
 
   const onSubmit = async (data: SignInForm) => {
     try {
+      setLoading(true);
       const credentials = {
         username: data.username,
         password: data.password,
@@ -59,8 +62,26 @@ export default function SignInScreen() {
     } catch (error) {
       // Runs if the request fails
       console.error("Sign in Failed", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color="#2563EB" />
+        <AppText> Please wait.... </AppText>
+        <AppText> Things are getting ready </AppText>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

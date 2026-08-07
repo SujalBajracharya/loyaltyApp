@@ -10,6 +10,7 @@ import UpdateCard from "@/components/UpdateCard";
 import { theme } from "@/constants/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
@@ -23,6 +24,12 @@ interface Product {
     count: number;
   };
 }
+
+type JwtPayload = {
+  sub: number;
+  user: string;
+  iat: number;
+};
 
 export default function HomeScreen() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -42,8 +49,22 @@ export default function HomeScreen() {
     }
   };
 
+  const loadUser = async () => {
+    try {
+      const token = await AsyncStorage.getItem("JWT token");
+
+      if (token) {
+        const decoded = jwtDecode<JwtPayload>(token);
+        setUser(decoded.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getProducts();
+    loadUser();
   }, []);
   return (
     <View style={styles.container}>
