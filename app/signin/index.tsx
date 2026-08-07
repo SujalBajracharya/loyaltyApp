@@ -50,7 +50,6 @@ export default function SignInScreen() {
         credentials,
       );
       await AsyncStorage.setItem("JWT token", JSON.stringify(response));
-      await AsyncStorage.setItem("username", credentials.username);
 
       // Runs only after the request is successful
       console.log(response.data);
