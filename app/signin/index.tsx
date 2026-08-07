@@ -1,22 +1,29 @@
-import { Image, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import styles from "../../styles/styles";
-import AppText from "../../components/AppText";
-import { useRouter } from "expo-router";
+import Button from "@/components/Button";
 import InputField from "@/components/InputField";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "@/components/Button";
+import { AxiosResponse } from "axios";
+import { useRouter } from "expo-router";
+import { useForm } from "react-hook-form";
+import { Image, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { z } from "zod";
+import AppText from "../../components/AppText";
+import styles from "../../styles/styles";
 
 export default function SignInScreen() {
   type SignInForm = z.infer<typeof schema>;
   const router = useRouter();
 
+  const axios = require("axios");
+
   const schema = z.object({
-    email: z.email("Invalid email"),
-    password: z.string().min(8, "Minimum 8 characters"),
+    username: z
+      .string()
+      .trim()
+      .min(2, "Username is required")
+      .max(100, "Username is too long"),
+    password: z.string().min(7, "Minimum 7 characters"),
   });
 
   const {
@@ -26,32 +33,33 @@ export default function SignInScreen() {
   } = useForm<SignInForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   const onSubmit = async (data: SignInForm) => {
     try {
-      const storedData = await AsyncStorage.getItem("signupForm");
-      if (!storedData) {
-        console.log("No signup data found.");
-        return;
-      }
+      const credentials = {
+        username: data.username,
+        password: data.password,
+      };
+      // Wait for the asynchronous operation to finish
+      const response: AxiosResponse = await axios.post(
+        "https://fakestoreapi.com/auth/login",
+        credentials,
+      );
+      await AsyncStorage.setItem("JWT token", JSON.stringify(response));
+      await AsyncStorage.setItem("username", credentials.username);
 
-      const signupData = JSON.parse(storedData);
+      // Runs only after the request is successful
+      console.log(response.data);
+      console.log("stored in AsyncStorage");
 
-      if (
-        signupData.email == data.email &&
-        signupData.password == data.password
-      ) {
-        console.log(`signin completed. \n email and password matched.`);
-        router.push("../home");
-      } else {
-        console.log(`signin failed. \n Invalid email or password.`);
-      }
+      router.replace("/home");
     } catch (error) {
-      console.error("Failed to read AsyncStorage:", error);
+      // Runs if the request fails
+      console.error("Sign in Failed", error);
     }
   };
 
@@ -87,8 +95,12 @@ export default function SignInScreen() {
           </AppText>
         </View>
         {/* Form Fields */}
-        <View style={{ gap: 18, marginBottom: 57, marginTop: 49}}>
-          <InputField control={control} name="email" placeholder="Email" />
+        <View style={{ gap: 18, marginBottom: 57, marginTop: 49 }}>
+          <InputField
+            control={control}
+            name="username"
+            placeholder="Username"
+          />
           <InputField
             control={control}
             name="password"

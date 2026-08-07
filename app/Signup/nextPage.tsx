@@ -1,15 +1,15 @@
-import { View, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import styles from "../../styles/styles";
-import AppText from "../../components/AppText";
 import Button from "@/components/Button";
-import { useRouter, Stack } from "expo-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "@/components/InputField";
 import PasswordRequirement from "@/components/PasswordRequirement";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { Stack, useRouter } from "expo-router";
+import { useForm } from "react-hook-form";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { z } from "zod";
+import AppText from "../../components/AppText";
+import styles from "../../styles/styles";
 
 export default function SignupProcessScreen() {
   type SignupForm = z.infer<typeof schema>;
@@ -56,14 +56,17 @@ export default function SignupProcessScreen() {
 
   const onSubmit = async (data: SignupForm) => {
     try {
-      await AsyncStorage.setItem("signupForm", JSON.stringify(data));
+      const user = {
+        email: data.email,
+        username: data.fullName,
+        password: data.password,
+      };
+      const response = await axios.post("https://fakestoreapi.com/users", user);
 
-      console.log("Form saved!");
+      console.log("user saved on id: " + response.data.id);
       router.push("/signup/allSet");
-      const asyncStorage = await AsyncStorage.getItem("signupForm");
-      console.log("From AsyncStorage: \n" + asyncStorage);
     } catch (error) {
-      console.error("Failed to save form:", error);
+      console.error("Failed to save User", error);
     }
   };
 

@@ -1,5 +1,6 @@
 import AppText from "@/components/AppText";
 import styles from "@/styles/styles";
+import { router } from "expo-router";
 import { Image, View } from "react-native";
 import Button from "./Button";
 
@@ -51,7 +52,16 @@ export default function RewardCard({
         {id}
       </AppText>
 
-      <Button style={{ borderRadius: 24 }} title="Redeem" />
+      <Button
+        style={{ borderRadius: 24 }}
+        title="Redeem"
+        onPress={() =>
+          router.push({
+            pathname: "/home/product/[id]",
+            params: { id },
+          })
+        }
+      />
     </View>
   );
 }

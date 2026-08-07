@@ -8,6 +8,7 @@ import RewardCard from "@/components/RewardCard";
 import SectionHeader from "@/components/SectionHeader";
 import UpdateCard from "@/components/UpdateCard";
 import { theme } from "@/constants/theme";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -25,11 +26,16 @@ interface Product {
 
 export default function HomeScreen() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [user, setUser] = useState("");
+
   const getProducts = async () => {
     try {
       const response = await axios.get("https://fakestoreapi.com/products");
+      const fetchedUser = await AsyncStorage.getItem("username");
 
-      console.log(response.data);
+      if (fetchedUser !== null) {
+        setUser(fetchedUser);
+      }
       setProducts(response.data);
     } catch (error) {
       console.log(error);
@@ -49,7 +55,7 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <View>
             <AppText variant="medium" size="m" color="background" weight="500">
-              Hi, Sarah Candra
+              Hi, {user ? user : "User"}
             </AppText>
           </View>
           {/* icon */}
@@ -79,10 +85,6 @@ export default function HomeScreen() {
                     image={product.image}
                   />
                 ))}
-
-                {/* <RewardCard />
-                <RewardCard />
-                <RewardCard /> */}
               </ScrollView>
             </View>
 
