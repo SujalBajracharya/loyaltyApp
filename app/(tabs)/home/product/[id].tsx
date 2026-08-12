@@ -1,7 +1,7 @@
 import AppText from "@/components/AppText";
 import Button from "@/components/Button";
+import { initializeDatabase } from "@/database/database";
 import styles from "@/styles/productStyles";
-import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
@@ -13,10 +13,10 @@ type Product = {
   description: string;
   category: string;
   image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
+  // rating: {
+  //   rate: number;
+  //   count: number;
+  // };
 };
 
 export default function ProductScreen() {
@@ -27,13 +27,13 @@ export default function ProductScreen() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `https://fakestoreapi.com/products/${id}`,
+        const db = await initializeDatabase();
+        const fetchedProduct = await db.getFirstAsync<Product>(
+          `SELECT * FROM products where id= ${id}`,
         );
-
-        setProduct(response.data);
+        setProduct(fetchedProduct);
       } catch (error) {
-        console.error("Failed to load item details", error);
+        console.log(error);
       } finally {
         setLoading(false);
       }

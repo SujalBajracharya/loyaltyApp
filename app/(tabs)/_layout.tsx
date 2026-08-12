@@ -1,5 +1,6 @@
 import Account from "@/assets/account.svg";
 import Home from "@/assets/home.svg";
+import Plus from "@/assets/plus.svg";
 import { Tabs } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -35,6 +36,16 @@ export default function HomeLayout() {
               href: "/home",
               tabBarIcon: ({ color, size }) => (
                 <Home height={size} width={size} color={color} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="addProduct"
+            options={{
+              title: "Add Product",
+              href: "/addProduct",
+              tabBarIcon: ({ color, size }) => (
+                <Plus height={size} width={size} color={color} />
               ),
             }}
           />

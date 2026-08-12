@@ -10,8 +10,9 @@ import UpdateCard from "@/components/UpdateCard";
 import { theme } from "@/constants/theme";
 import { initializeDatabase } from "@/database/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "expo-router";
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 interface Product {
@@ -58,9 +59,18 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    getProducts();
     loadUser();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("HomeScreen focused");
+      getProducts();
+      return () => {
+        console.log("HomeScreen unfocused");
+      };
+    }, []),
+  );
   return (
     <View style={styles.container}>
       <ScrollView

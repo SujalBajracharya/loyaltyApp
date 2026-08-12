@@ -55,14 +55,6 @@ export default function MenuCard({
       >
         Earn +{rating} pts
       </AppText>
-      <AppText
-        variant="medium"
-        weight="500"
-        color="primary"
-        style={{ fontSize: 14, marginBottom: 12, display: "none" }}
-      >
-        {id}
-      </AppText>
     </TouchableOpacity>
   );
 }

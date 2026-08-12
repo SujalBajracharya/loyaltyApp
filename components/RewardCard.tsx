@@ -46,14 +46,6 @@ export default function RewardCard({
       >
         {price} pts
       </AppText>
-      <AppText
-        variant="medium"
-        weight="500"
-        color="textLight"
-        style={{ fontSize: 14, marginBottom: 12, display: "none" }}
-      >
-        {id}
-      </AppText>
 
       <Button
         style={{ borderRadius: 24 }}
