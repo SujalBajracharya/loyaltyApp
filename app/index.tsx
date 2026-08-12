@@ -1,3 +1,4 @@
+import { initializeDatabase } from "@/database/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
@@ -20,8 +21,11 @@ export default function Index() {
       console.error(error);
     }
   };
+
+  //runs on first load
   useEffect(() => {
     checkFirstView();
+    initializeDatabase();
   }, []);
 
   return firstView ? (
