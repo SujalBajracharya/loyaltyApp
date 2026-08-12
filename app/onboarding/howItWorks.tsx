@@ -1,11 +1,11 @@
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Pagination from "../../components/pagination";
-import styles from "../../styles/styles";
-import AppText from "../../components/AppText";
 import Button from "@/components/Button";
 import FlowCard from "@/components/FlowCard";
 import { useRouter } from "expo-router";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../../components/AppText";
+import Pagination from "../../components/pagination";
+import styles from "../../styles/styles";
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function OnboardingScreen() {
 
         <FlowCard />
       </View>
-      
+
       {/* Footer */}
       <View style={styles.footer}>
         <View style={{ marginTop: 68, alignItems: "center" }}>
@@ -44,7 +44,14 @@ export default function OnboardingScreen() {
             title="Continue"
             onPress={() => router.push("/onboarding/data")}
           />
-          <Button title="Skip" variant="ghost" onPress={() => router.back()} />
+          <Button
+            title="Skip"
+            variant="ghost"
+            onPress={() => {
+              router.dismissAll();
+              router.replace("/signup");
+            }}
+          />
         </View>
       </View>
     </SafeAreaView>

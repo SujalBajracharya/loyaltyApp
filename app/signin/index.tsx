@@ -69,6 +69,7 @@ export default function SignInScreen() {
       console.log(response.data);
       console.log("stored in AsyncStorage");
 
+      router.dismissAll();
       router.replace("/home");
     } catch (error) {
       // Runs if the request fails

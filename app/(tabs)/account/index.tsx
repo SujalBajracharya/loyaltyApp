@@ -7,6 +7,7 @@ import { router } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Linking,
   ScrollView,
   Text,
@@ -46,6 +47,7 @@ type User = {
 
 export default function AccountScreen() {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const loadUser = async () => {
     try {
       const token = await AsyncStorage.getItem("JWT token");
@@ -58,6 +60,8 @@ export default function AccountScreen() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,6 +81,20 @@ export default function AccountScreen() {
       console.error("Logout failed:", error);
     }
   };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

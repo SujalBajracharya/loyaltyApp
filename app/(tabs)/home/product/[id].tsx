@@ -2,9 +2,10 @@ import AppText from "@/components/AppText";
 import Button from "@/components/Button";
 import { initializeDatabase } from "@/database/database";
 import styles from "@/styles/productStyles";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Product = {
   id: number;
@@ -44,22 +45,37 @@ export default function ProductScreen() {
 
   if (loading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ActivityIndicator size="large" color="#2563EB" />
-        <AppText> Please wait.... </AppText>
-        <AppText> Things are getting ready </AppText>
-      </View>
+      <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#2563EB" />
+          <AppText> Please wait.... </AppText>
+          <AppText> Things are getting ready </AppText>
+        </View>
+      </SafeAreaView>
     );
   }
+
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerTitle: product?.title ?? "Product",
+        }}
+      />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}
+      >
         {/* Product Image */}
         <View style={styles.imageContainer}>
           <Image
@@ -89,6 +105,6 @@ export default function ProductScreen() {
       <View style={styles.bottomBar}>
         <Button title="Redeem" />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

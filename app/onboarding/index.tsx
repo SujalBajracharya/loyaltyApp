@@ -1,14 +1,14 @@
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import BenefitCard from "../../components/benefitCard";
-import Pagination from "../../components/pagination";
-import styles from "../../styles/styles";
-import AppText from "../../components/AppText";
-import Button from "@/components/Button";
 import Icon1 from "@/assets/OnboardingLogo1.svg";
 import Icon2 from "@/assets/OnboardingLogo2.svg";
 import Icon3 from "@/assets/OnboardingLogo3.svg";
+import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../../components/AppText";
+import BenefitCard from "../../components/benefitCard";
+import Pagination from "../../components/pagination";
+import styles from "../../styles/styles";
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -76,7 +76,10 @@ export default function OnboardingScreen() {
           <Button
             title="Skip"
             variant="ghost"
-            onPress={() => router.push("/onboarding/data")}
+            onPress={() => {
+              router.dismissAll();
+              router.replace("/signup");
+            }}
           />
         </View>
       </View>

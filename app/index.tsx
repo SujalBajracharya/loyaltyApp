@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 
 export default function Index() {
   const [firstView, setFirstView] = useState<boolean | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
   const checkFirstView = async () => {
     try {
       const value = await AsyncStorage.getItem("firstView");
+      const token = await AsyncStorage.getItem("JWT token");
 
       if (value === null) {
         // First time opening the app
@@ -16,6 +18,12 @@ export default function Index() {
       } else {
         // App has been opened before
         setFirstView(false);
+      }
+
+      if (token === null) {
+        setIsSignedIn(false);
+      } else {
+        setIsSignedIn(true);
       }
     } catch (error) {
       console.error(error);
@@ -28,8 +36,14 @@ export default function Index() {
     initializeDatabase();
   }, []);
 
+  if (firstView === null || isSignedIn === null) {
+    return null;
+  }
+
   return firstView ? (
     <Redirect href="/onboarding" />
+  ) : isSignedIn ? (
+    <Redirect href="/home" />
   ) : (
     <Redirect href="/signup" />
   );

@@ -1,10 +1,10 @@
+import Lock from "@/assets/Lock.svg";
+import Button from "@/components/Button";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AppText from "../../components/AppText";
 import Pagination from "../../components/pagination";
 import styles from "../../styles/styles";
-import AppText from "../../components/AppText";
-import Button from "@/components/Button";
-import Lock from "@/assets/Lock.svg";
 
 import { useRouter } from "expo-router";
 
@@ -64,9 +64,19 @@ export default function OnboardingScreen() {
         <View style={{ marginTop: 60, gap: 0 }}>
           <Button
             title="Continue"
-            onPress={() => router.push("/signup")}
+            onPress={() => {
+              router.dismissAll();
+              router.replace("/signup");
+            }}
           />
-          <Button title="Skip" variant="ghost" onPress={() => router.back()} />
+          <Button
+            title="Skip"
+            variant="ghost"
+            onPress={() => {
+              router.dismissAll();
+              router.replace("/signup");
+            }}
+          />
         </View>
       </View>
     </SafeAreaView>
