@@ -29,7 +29,12 @@ export default function RewardCard({
     >
       <Image style={styles.image} source={{ uri: image }} />
 
-      <AppText variant="medium" weight="800" style={{ fontSize: 16 }}>
+      <AppText
+        variant="medium"
+        weight="800"
+        style={{ fontSize: 16 }}
+        numberOfLines={2}
+      >
         {title}
       </AppText>
 

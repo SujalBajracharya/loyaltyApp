@@ -8,8 +8,8 @@ import RewardCard from "@/components/RewardCard";
 import SectionHeader from "@/components/SectionHeader";
 import UpdateCard from "@/components/UpdateCard";
 import { theme } from "@/constants/theme";
+import { initializeDatabase } from "@/database/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -18,11 +18,8 @@ interface Product {
   id: number;
   title: string;
   price: number;
+  description: string;
   image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
 }
 
 type JwtPayload = {
@@ -37,13 +34,11 @@ export default function HomeScreen() {
 
   const getProducts = async () => {
     try {
-      const response = await axios.get("https://fakestoreapi.com/products");
-      const fetchedUser = await AsyncStorage.getItem("username");
-
-      if (fetchedUser !== null) {
-        setUser(fetchedUser);
-      }
-      setProducts(response.data);
+      const db = await initializeDatabase();
+      const fetchedProducts = await db.getAllAsync<Product>(
+        "SELECT * FROM products",
+      );
+      setProducts(fetchedProducts);
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +119,7 @@ export default function HomeScreen() {
                     title={product.title}
                     price={product.price}
                     image={product.image}
-                    rating={product.rating.rate}
+                    rating={5}
                   />
                 ))}
               </ScrollView>

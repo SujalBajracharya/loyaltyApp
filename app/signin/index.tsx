@@ -3,10 +3,17 @@ import InputField from "@/components/InputField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
+import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ActivityIndicator, Image, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
 import AppText from "../../components/AppText";
@@ -18,6 +25,10 @@ export default function SignInScreen() {
   const router = useRouter();
 
   const axios = require("axios");
+
+  const copyText = async (text: string) => {
+    await Clipboard.setStringAsync(text);
+  };
 
   const schema = z.object({
     username: z
@@ -113,6 +124,34 @@ export default function SignInScreen() {
           >
             Sign In
           </AppText>
+          <Pressable onLongPress={() => copyText("johnd")}>
+            <AppText
+              variant="medium"
+              size="m"
+              color="textDark"
+              style={{
+                textAlign: "center",
+                fontSize: 12,
+                fontWeight: "400",
+              }}
+            >
+              johnd
+            </AppText>
+          </Pressable>
+          <Pressable onLongPress={() => copyText("m38rmF$")}>
+            <AppText
+              variant="medium"
+              size="m"
+              color="textDark"
+              style={{
+                textAlign: "center",
+                fontSize: 12,
+                fontWeight: "400",
+              }}
+            >
+              m38rmF$
+            </AppText>
+          </Pressable>
         </View>
         {/* Form Fields */}
         <View style={{ gap: 18, marginBottom: 57, marginTop: 49 }}>
