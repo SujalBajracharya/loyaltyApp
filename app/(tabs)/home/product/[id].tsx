@@ -84,6 +84,29 @@ export default function ProductScreen() {
     }
   };
 
+  const openAlertBox = async (id: number | undefined) => {
+    if (id === undefined) {
+      return;
+    }
+    return Alert.alert(
+      "Delete Product",
+      "Are you sure you want to delete this product?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: () => {
+            deleteItem(id);
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <Stack.Screen
@@ -138,7 +161,7 @@ export default function ProductScreen() {
             width: "100%",
             backgroundColor: "red",
           }}
-          onPress={() => deleteItem(product?.id)}
+          onPress={() => openAlertBox(product?.id)}
         >
           <AppText
             size="m"

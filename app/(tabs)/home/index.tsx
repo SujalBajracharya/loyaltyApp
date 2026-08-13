@@ -10,10 +10,10 @@ import UpdateCard from "@/components/UpdateCard";
 import { theme } from "@/constants/theme";
 import { initializeDatabase } from "@/database/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "expo-router";
 import { jwtDecode } from "jwt-decode";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 interface Product {
   id: number;
@@ -32,14 +32,19 @@ type JwtPayload = {
 export default function HomeScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const [user, setUser] = useState("");
+  const [page, setPage] = useState(0);
 
-  const getProducts = async () => {
+  const getProducts = async (page: number) => {
     try {
       const db = await initializeDatabase();
+
+      const limit = 5;
+      const offset = page * limit;
       const fetchedProducts = await db.getAllAsync<Product>(
-        "SELECT * FROM products",
+        "SELECT * FROM products ORDER BY id ASC LIMIT ? OFFSET ?",
+        [limit, offset],
       );
-      setProducts(fetchedProducts);
+      setProducts((prev) => [...prev, ...fetchedProducts]);
     } catch (error) {
       console.log(error);
     }
@@ -62,11 +67,9 @@ export default function HomeScreen() {
     loadUser();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      getProducts();
-    }, []),
-  );
+  useEffect(() => {
+    getProducts(page);
+  }, [page]);
   return (
     <View style={styles.container}>
       <ScrollView
@@ -93,30 +96,46 @@ export default function HomeScreen() {
             {/* Claim your Rewards */}
             <View>
               <SectionHeader title="Claim your rewards" />
-              <ScrollView
+
+              <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ gap: 18 }}
-              >
-                {products.map((product) => (
+                data={products}
+                renderItem={({ item }) => (
                   <RewardCard
-                    key={product.id}
-                    id={product.id}
-                    title={product.title}
-                    price={product.price}
-                    image={product.image}
+                    id={item.id}
+                    title={item.title}
+                    price={item.price}
+                    image={item.image}
                   />
-                ))}
-              </ScrollView>
+                )}
+                onEndReached={() => {
+                  setPage((prev) => prev + 1);
+                }}
+                keyExtractor={(product) => product.id.toString()}
+              />
             </View>
 
             {/* Our Menu */}
             <View>
               <SectionHeader title="Our Menu" />
-              <ScrollView
+              <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ gap: 18 }}
+                data={products}
+                renderItem={({ item }) => (
+                  <MenuCard
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    price={item.price}
+                    image={item.image}
+                    rating={5}
+                  />
+                )}
+                keyExtractor={(product) => product.id.toString()}
               >
                 {products.map((product) => (
                   <MenuCard
@@ -128,7 +147,7 @@ export default function HomeScreen() {
                     rating={5}
                   />
                 ))}
-              </ScrollView>
+              </FlatList>
             </View>
 
             {/* News & Updates */}
