@@ -64,11 +64,7 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("HomeScreen focused");
       getProducts();
-      return () => {
-        console.log("HomeScreen unfocused");
-      };
     }, []),
   );
   return (

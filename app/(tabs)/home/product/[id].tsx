@@ -2,9 +2,17 @@ import AppText from "@/components/AppText";
 import Button from "@/components/Button";
 import { initializeDatabase } from "@/database/database";
 import styles from "@/styles/productStyles";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Product = {
@@ -61,6 +69,21 @@ export default function ProductScreen() {
     );
   }
 
+  const deleteItem = async (id: number | undefined) => {
+    try {
+      const db = await initializeDatabase();
+      if (id === undefined) {
+        console.log("id is undefined");
+        return;
+      }
+      await db.runAsync(`DELETE FROM products WHERE id = ?`, id);
+      router.replace("/home");
+      Alert.alert("Success", "Product deleted successfully!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <Stack.Screen
@@ -102,8 +125,29 @@ export default function ProductScreen() {
       </ScrollView>
 
       {/* Bottom Buttons */}
-      <View style={styles.bottomBar}>
+      <View style={[styles.bottomBar, { flex: 1, flexDirection: "column" }]}>
         <Button title="Redeem" />
+        <TouchableOpacity
+          style={{
+            borderRadius: 15,
+            paddingVertical: 16,
+            paddingHorizontal: 8,
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+            width: "100%",
+            backgroundColor: "red",
+          }}
+          onPress={() => deleteItem(product?.id)}
+        >
+          <AppText
+            size="m"
+            variant="medium"
+            style={{ textAlign: "center", color: "white" }}
+          >
+            Delete Item
+          </AppText>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
