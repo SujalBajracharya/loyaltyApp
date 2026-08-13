@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#2563EB",
+    color: "#0E9384",
     marginTop: 18,
   },
 

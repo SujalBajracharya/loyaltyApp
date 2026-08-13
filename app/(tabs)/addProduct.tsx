@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import z from "zod";
 
 export default function AddProducts() {
   const [title, setTitle] = useState("");
@@ -17,30 +18,79 @@ export default function AddProducts() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
+  const [rate, setRate] = useState("");
+  const [count, setCount] = useState("");
+
+  const productSchema = z.object({
+    title: z.string().trim().min(1, "Title is required"),
+
+    price: z.coerce.number().positive("Price must be greater than 0"),
+
+    description: z.string().trim().min(1, "Description is required"),
+
+    category: z.string().trim().min(1, "Category is required"),
+
+    image: z.string().trim().min(1, "Image URL is required"),
+
+    rate: z.coerce
+      .number()
+      .min(0, "Rating cannot be below 0")
+      .max(5, "Rating cannot be above 5"),
+
+    count: z.coerce
+      .number()
+      .int("Count must be a whole number")
+      .nonnegative("Count cannot be negative"),
+  });
 
   const handleAddProduct = async () => {
-    // Basic validation
-    if (!title || !price || !description || !category || !image) {
-      Alert.alert("Error", "Please fill in all fields.");
+    const result = productSchema.safeParse({
+      title,
+      price,
+      description,
+      category,
+      image,
+      rate,
+      count,
+    });
+
+    if (!result.success) {
+      Alert.alert("Error", result.error.issues[0].message);
+
       Toast.show({
         type: "error",
-        text1: "Please Fill in all the Fields",
+        text1: result.error.issues[0].message,
       });
+
       return;
     }
+
+    // Everything is valid here
+    const data = result.data;
 
     try {
       const db = await initializeDatabase();
 
-      await db.runAsync(
+      const result = await db.runAsync(
         `INSERT INTO products
         (title, price, description, category, image)
         VALUES (?, ?, ?, ?, ?)`,
-        title,
-        Number(price),
-        description,
-        category,
-        image,
+        data.title,
+        data.price,
+        data.description,
+        data.category,
+        data.image,
+      );
+
+      const productId = result.lastInsertRowId;
+
+      await db.runAsync(
+        `INSERT INTO ratings
+        (product_id, rate, count)
+        VALUES (?, ?, ?)`,
+        productId,
+        data.rate, // Convert String to Number
+        data.count, // Convert String to Number
       );
 
       Alert.alert("Success", "Product added successfully!");
@@ -55,6 +105,8 @@ export default function AddProducts() {
       setDescription("");
       setCategory("");
       setImage("");
+      setRate("");
+      setCount("");
     } catch (error) {
       console.log("Failed to add product:", error);
       Alert.alert("Error", "Failed to add product.");
@@ -146,6 +198,36 @@ export default function AddProducts() {
           keyboardType="url"
           value={image}
           onChangeText={setImage}
+          style={styles.input}
+        />
+      </View>
+
+      {/* Rate URL */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Rate</Text>
+
+        <TextInput
+          placeholder="Enter the rating of your product"
+          placeholderTextColor="#999"
+          autoCapitalize="none"
+          keyboardType="decimal-pad"
+          value={rate}
+          onChangeText={setRate}
+          style={styles.input}
+        />
+      </View>
+
+      {/* Count URL */}
+      <View style={styles.fieldContainer}>
+        <Text style={styles.label}>Count</Text>
+
+        <TextInput
+          placeholder="Enter the counts"
+          placeholderTextColor="#999"
+          autoCapitalize="none"
+          keyboardType="number-pad"
+          value={count}
+          onChangeText={setCount}
           style={styles.input}
         />
       </View>

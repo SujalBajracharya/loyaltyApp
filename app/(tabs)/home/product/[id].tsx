@@ -186,8 +186,9 @@ export default function ProductScreen() {
           <View style={styles.divider} />
 
           <Text style={styles.sectionTitle}>Rating</Text>
-          <Text style={styles.description}>{product?.rating.rate}</Text>
-          <Text style={styles.description}>({product?.rating.count})</Text>
+          <Text style={styles.description}>
+            {product?.rating.rate} ({product?.rating.count})
+          </Text>
         </View>
       </ScrollView>
 
