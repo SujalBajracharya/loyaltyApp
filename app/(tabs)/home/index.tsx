@@ -2,7 +2,6 @@ import Bell from "@/assets/bell.svg";
 import ActivityCard from "@/components/ActivityCard";
 import AppText from "@/components/AppText";
 import FloatingQRButton from "@/components/FloatingQRButton";
-import MenuCard from "@/components/MenuCard";
 import PointsCard from "@/components/PointsCard";
 import RewardCard from "@/components/RewardCard";
 import SectionHeader from "@/components/SectionHeader";
@@ -113,12 +112,12 @@ export default function HomeScreen() {
                 onEndReached={() => {
                   setPage((prev) => prev + 1);
                 }}
-                keyExtractor={(product) => product.id.toString()}
+                keyExtractor={(item) => item.id.toString()}
               />
             </View>
 
             {/* Our Menu */}
-            <View>
+            {/* <View>
               <SectionHeader title="Our Menu" />
               <FlatList
                 horizontal
@@ -135,7 +134,7 @@ export default function HomeScreen() {
                     rating={5}
                   />
                 )}
-                keyExtractor={(product) => product.id.toString()}
+                keyExtractor={(item) => item.id.toString()}
               >
                 {products.map((product) => (
                   <MenuCard
@@ -148,7 +147,7 @@ export default function HomeScreen() {
                   />
                 ))}
               </FlatList>
-            </View>
+            </View> */}
 
             {/* News & Updates */}
             <View>

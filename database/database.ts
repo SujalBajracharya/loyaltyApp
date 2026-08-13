@@ -60,7 +60,7 @@ export async function initializeDatabase() {
   const count = await db.getFirstAsync<{ count: number }>(
     `SELECT COUNT(*) as count FROM ratings`,
   );
-  console.log(count?.count);
+
   // Seed ratings only once
   if (count?.count === 0) {
     await db.execAsync(`

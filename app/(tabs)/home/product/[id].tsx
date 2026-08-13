@@ -22,25 +22,64 @@ type Product = {
   description: string;
   category: string;
   image: string;
-  // rating: {
-  //   rate: number;
-  //   count: number;
-  // };
+  rating: {
+    rate: number;
+    count: number;
+  };
+};
+
+type FetchedProduct = {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+  rate: number;
+  count: number;
 };
 
 export default function ProductScreen() {
   const [loading, setLoading] = useState(true);
   const { id } = useLocalSearchParams();
+  const productId = Number(id);
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const db = await initializeDatabase();
-        const fetchedProduct = await db.getFirstAsync<Product>(
-          `SELECT * FROM products where id= ${id}`,
+        const fetchedProduct = await db.getFirstAsync<FetchedProduct>(
+          `SELECT
+            products.id,
+            products.title,
+            products.price,
+            products.description,
+            products.category,
+            products.image,
+            ratings.rate AS rate,
+            ratings.count AS count
+              FROM products
+              JOIN ratings
+                ON products.id = ratings.product_id
+                WHERE products.id = ?`,
+          [productId],
         );
-        setProduct(fetchedProduct);
+        if (fetchedProduct) {
+          const transformedProduct: Product = {
+            id: fetchedProduct.id,
+            title: fetchedProduct.title,
+            price: fetchedProduct.price,
+            description: fetchedProduct.description,
+            category: fetchedProduct.category,
+            image: fetchedProduct.image,
+            rating: {
+              rate: fetchedProduct.rate,
+              count: fetchedProduct.count,
+            },
+          };
+          setProduct(transformedProduct);
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -142,8 +181,13 @@ export default function ProductScreen() {
           <View style={styles.divider} />
 
           <Text style={styles.sectionTitle}>Description</Text>
-
           <Text style={styles.description}>{product?.description}</Text>
+
+          <View style={styles.divider} />
+
+          <Text style={styles.sectionTitle}>Rating</Text>
+          <Text style={styles.description}>{product?.rating.rate}</Text>
+          <Text style={styles.description}>({product?.rating.count})</Text>
         </View>
       </ScrollView>
 
